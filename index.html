@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USB-Verkehrtherum | Kunstprojekt</title>
+    <style>
+        /* Modernes CSS mit Variablen & Dark/White-Mode */
+        :root {
+            --usb-blue: #0066cc;
+            --usb-orange: #ff9900;
+            --bg: #f0f0f0;
+            --text: #333;
+            --usb-metal: linear-gradient(135deg, #c0c0c0, #e0e0e0);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #121212;
+                --text: #f0f0f0;
+                --usb-metal: linear-gradient(135deg, #505050, #808080);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.5s;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeIn 1s 0.5s forwards;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeIn 1s 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Der RIESIGE USB-Stick */
+        .usb-monument {
+            position: relative;
+            width: min(80vw, 400px);
+            height: min(60vh, 600px);
+            margin: 3rem auto;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .usb-monument:hover {
+            transform: rotateY(10deg) rotateX(-5deg);
+        }
+
+        .usb-body {
+            position: absolute;
+            width: 100%;
+            height: 80%;
+            bottom: 0;
+            background: var(--usb-metal);
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .usb-plug {
+            position: absolute;
+            width: 40%;
+            height: 20%;
+            top: 0;
+            left: 30%;
+            background: var(--usb-metal);
+            border-radius: 5px 5px 0 0;
+            z-index: 2;
+        }
+
+        .usb-hole {
+            position: absolute;
+            width: 20%;
+            height: 50%;
+            top: 20%;
+            left: 40%;
+            background: #000;
+            z-index: 1;
+        }
+
+        .usb-label {
+            position: absolute;
+            width: 60%;
+            height: 20%;
+            bottom: 10%;
+            left: 20%;
+            background: var(--usb-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 5px;
+            transform: rotateY(180deg);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .usb-monument:hover .usb-label {
+            transform: rotateY(0);
+            opacity: 1;
+        }
+
+        /* Interaktive Elemente */
+        .btn {
+            background: var(--usb-orange);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            margin: 0.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .btn:hover {
+            background: #ff6600;
+            transform: translateY(-3px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .fun-fact {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1rem;
+            border-left: 3px solid var(--usb-orange);
+            background: rgba(0, 0, 0, 0.05);
+            text-align: left;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .visible {
+            opacity: 1;
+        }
+
+        footer {
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h1>USB-Verkehrtherum</h1>
+    <p class="subtitle">Ein digitales Denkmal für den Kampf gegen falsch herum eingesteckte USB-Sticks</p>
+
+    <!-- Der riesige USB-Stick -->
+    <div class="usb-monument" onclick="rotateUSB()">
+        <div class="usb-plug"></div>
+        <div class="usb-body"></div>
+        <div class="usb-hole"></div>
+        <div class="usb-label">1TB (gelogen)</div>
+    </div>
+
+    <!-- Interaktive Buttons -->
+    <div>
+        <button class="btn" onclick="showFunFact()">Fun-Fakt enthüllen</button>
+        <button class="btn" onclick="toggleDarkMode()">Dunkelmodus</button>
+    </div>
+
+    <!-- Dynamischer Inhalt -->
+    <div class="fun-fact" id="funFact">
+        <strong>Did you know?</strong> Statistisch gesehen braucht man durchschnittlich <strong>2,7 Versuche</strong>, um einen USB-Stick richtig herum einzustecken. Das sind etwa <strong>12 Sekunden verschwendete Lebenszeit</strong> pro Steckvorgang.
+    </div>
+
+    <footer>
+        Kein Unternehmen. Kein Sinn. Nur USB. | Made with ❤️ und 3x falsch herum
+    </footer>
+</div>
+
+<script>
+    // Mini-SPA-Funktionalität
+    let rotated = false;
+
+    function rotateUSB() {
+        const usb = document.querySelector('.usb-monument');
+        rotated = !rotated;
+        usb.style.transform = rotated
+            ? 'rotateY(180deg) scale(0.9)'
+            : 'rotateY(0) scale(1)';
+    }
+
+    function showFunFact() {
+        document.getElementById('funFact').classList.add('visible');
+    }
+
+    function toggleDarkMode() {
+        const root = document.documentElement;
+        const isDark = root.style.getPropertyValue('--bg') === '#121212';
+
+        if (isDark) {
+            root.style.setProperty('--bg', '#f0f0f0');
+            root.style.setProperty('--text', '#333');
+            root.style.setProperty('--usb-metal', 'linear-gradient(135deg, #c0c0c0, #e0e0e0)');
+        } else {
+            root.style.setProperty('--bg', '#121212');
+            root.style.setProperty('--text', '#f0f0f0');
+            root.style.setProperty('--usb-metal', 'linear-gradient(135deg, #505050, #808080)');
+        }
+    }
+
+    // Zufällige USB-Facts
+    const facts = [
+        "USB-C wurde erfunden, weil niemand mehr Lust auf das 'USB-Einsteck-Lotteriespiel' hatte.",
+        "In 47% aller Fälle wird der Stick nach dem 2. Fehlversuch wütend gedreht, statt ihn umzudrehen.",
+        "Die kumulierte Zeit aller Menschen, die USB-Sticks falsch herum einstecken, könnte die Mona Lisa 14x malen."
+    ];
+
+    // Beim Laden einen zufälligen Fact anzeigen
+    window.onload = function() {
+        setTimeout(() => {
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
+            document.getElementById('funFact').innerHTML =
+                `<strong>Fun-Fact:</strong> ${randomFact}`;
+        }, 2000);
+    };
+</script>
+</body>
+</html>
